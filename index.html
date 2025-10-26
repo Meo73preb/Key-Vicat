@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vicat Key System - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Login/Register Page */
+        #auth-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .auth-card h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+            text-align: center;
+        }
+        
+        .auth-card .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            margin-top: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #f5f5f5;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            width: auto;
+            font-size: 14px;
+            display: inline-block;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #e91e63 100%);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+        }
+        
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+        
+        /* Dashboard */
+        #dashboard-page {
+            display: none;
+        }
+        
+        .dashboard-header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .dashboard-header h1 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin: 0;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        /* Key Display */
+        .key-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .key-value {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            color: #667eea;
+            font-weight: bold;
+            word-break: break-all;
+            margin-bottom: 10px;
+        }
+        
+        /* List Items */
+        .list-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .list-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .list-item.blacklisted {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+        
+        .list-item.redeemed {
+            opacity: 0.7;
+            border-left-color: #4caf50;
+        }
+        
+        .list-item-content {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .list-item-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .item-title {
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .item-info {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .badge.active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge.blacklisted {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge.redeemed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge.available {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 30px 20px;
+            }
+            
+            .dashboard-header {
+                padding: 15px;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.4em;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .tab {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+            
+            .list-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .list-item-actions {
+                width: 100%;
+            }
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+        
+        .mt-2 {
+            margin-top: 20px;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Page (Login/Register) -->
+    <div id="auth-page">
+        <div class="auth-card">
+            <h1>🔑 Vicat Key System</h1>
+            <p class="subtitle" id="auth-subtitle">Đăng nhập để quản lý keys</p>
+            
+            <div id="auth-message" class="message"></div>
+            
+            <!-- Login Form -->
+            <div id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" placeholder="Nhập username..." autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Nhập password..." autocomplete="current-password">
+                </div>
+                <button class="btn" id="login-btn" onclick="handleLogin()">
+                    Đăng nhập
+                </button>
+                <button class="btn btn-secondary" onclick="switchToRegister()">
+                    Chưa có tài khoản? Đăng ký
+                </button>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="register-form" class="hidden">
+                <div class="form-group">
+                    <label for="register-username">Username (chỉ chữ, số, @)</label>
+                    <input type="text" id="register-username" placeholder="Nhập username..." autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" placeholder="Nhập password..." autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email (không bắt buộc)</label>
+                    <input type="email" id="register-email" placeholder="Nhập email..." autocomplete="email">
+                </div>
+                <button class="btn" id="register-btn" onclick="handleRegister()">
+                    Đăng ký
+                </button>
+                <button class="btn btn-secondary" onclick="switchToLogin()">
+                    Đã có tài khoản? Đăng nhập
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- User Dashboard -->
+    <div id="user-dashboard" class="container">
+        <div class="dashboard-header">
+            <h1>👋 Welcome, <span id="user-name"></span></h1>
+            <button class="btn btn-small btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchDashboardTab('user-redeem')">🎟️ Redeem Code</button>
+            <button class="tab" onclick="switchDashboardTab('user-keys')">🔑 My Keys</button>
+            <button class="tab" onclick="switchDashboardTab('user-check')">🔍 Check Key</button>
+        </div>
+        
+        <!-- Redeem Code Tab -->
+        <div id="user-redeem" class="tab-content active">
+            <div class="card">
+                <h2>🎟️ Redeem Code</h2>
+                <div id="redeem-message" class="message"></div>
+                <div class="form-group">
+                    <label for="redeem-code-input">Nhập Redeem Code</label>
+                    <input type="text" id="redeem-code-input" placeholder="Nhập code...">
+                </div>
+                <button class="btn" onclick="handleRedeem()">Redeem</button>
+                
+                <div id="redeemed-key-display" class="key-display hidden">
+                    <p style="margin-bottom: 10px; font-weight: 600; color: #333;">✅ Key của bạn:</p>
+                    <div class="key-value" id="redeemed-key-value"></div>
+                    <button class="btn btn-small btn-success" onclick="copyKey('redeemed-key-value')">
+                        📋 Copy Key
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- My Keys Tab -->
+        <div id="user-keys" class="tab-content">
+            <div class="card">
+                <h2>🔑 My Keys</h2>
+                <div id="user-keys-message" class="message"></div>
+                <div id="user-keys-list" class="list-container"></div>
+            </div>
+        </div>
+        
+        <!-- Check Key Tab -->
+        <div id="user-check" class="tab-content">
+            <div class="card">
+                <h2>🔍 Check Key</h2>
+                <div id="check-message" class="message"></div>
+                <div class="form-group">
+                    <label for="check-key-input">Nhập Key cần kiểm tra</label>
+                    <input type="text" id="check-key-input" placeholder="vicat-xxxx-xxxx-xxxx">
+                </div>
+                <button class="btn" onclick="handleCheckKey()">Kiểm tra</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="container">
+        <div class="dashboard-header">
+            <h1>⚙️ Admin Panel - <span id="admin-name"></span></h1>
+            <button class="btn btn-small btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchDashboardTab('admin-create')">➕ Create Redeem Codes</button>
+            <button class="tab" onclick="switchDashboardTab('admin-codes')">🎟️ All Redeem Codes</button>
+            <button class="tab" onclick="switchDashboardTab('admin-keys')">🔑 All Keys</button>
+            <button class="tab" onclick="switchDashboardTab('admin-users')">👥 All Users</button>
+            <button class="tab" onclick="switchDashboardTab('admin-blacklist')">🚫 Blacklist</button>
+            <button class="tab" onclick="switchDashboardTab('admin-check')">🔍 Check Key</button>
+        </div>
+        
+        <!-- Create Redeem Codes Tab -->
+        <div id="admin-create" class="tab-content active">
+            <div class="card">
+                <h2>➕ Create Redeem Codes</h2>
+                <div id="create-message" class="message"></div>
+                <div class="form-group">
+                    <label for="code-count">Số lượng codes (1-100)</label>
+                    <input type="number" id="code-count" min="1" max="100" value="1" placeholder="1">
+                </div>
+                <button class="btn" onclick="handleCreateCodes()">Generate Codes</button>
+                
+                <div id="generated-codes-display" class="hidden mt-2">
+                    <h3 style="color: #333; margin-bottom: 15px;">Codes đã tạo:</h3>
+                    <div id="generated-codes-list" class="list-container"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- All Redeem Codes Tab -->
+        <div id="admin-codes" class="tab-content">
+            <div class="card">
+                <h2>🎟️ All Redeem Codes</h2>
+                <div id="codes-message" class="message"></div>
+                <button class="btn btn-small" onclick="loadRedeemCodes()">🔄 Refresh</button>
+                <div id="codes-list" class="list-container mt-2"></div>
+            </div>
+        </div>
+        
+        <!-- All Keys Tab -->
+        <div id="admin-keys" class="tab-content">
+            <div class="card">
+                <h2>🔑 All Active Keys</h2>
+                <div id="keys-message" class="message"></div>
+                <button class="btn btn-small" onclick="loadAllKeys()">🔄 Refresh</button>
+                <div id="keys-list" class="list-container mt-2"></div>
+            </div>
+        </div>
+        
+        <!-- All Users Tab -->
+        <div id="admin-users" class="tab-content">
+            <div class="card">
+                <h2>👥 All Users</h2>
+                <div id="users-message" class="message"></div>
+                <button class="btn btn-small" onclick="loadAllUsers()">🔄 Refresh</button>
+                <div id="users-list" class="list-container mt-2"></div>
+            </div>
+        </div>
+        
+        <!-- Blacklist Tab -->
+        <div id="admin-blacklist" class="tab-content">
+            <div class="card">
+                <h2>🚫 Blacklisted Keys</h2>
+                <div id="blacklist-message" class="message"></div>
+                <button class="btn btn-small" onclick="loadAllKeys()">🔄 Refresh</button>
+                <div id="blacklist-list" class="list-container mt-2"></div>
+            </div>
+        </div>
+        
+        <!-- Check Key Tab (Admin) -->
+        <div id="admin-check" class="tab-content">
+            <div class="card">
+                <h2>🔍 Check Key</h2>
+                <div id="admin-check-message" class="message"></div>
+                <div class="form-group">
+                    <label for="admin-check-key-input">Nhập Key cần kiểm tra</label>
+                    <input type="text" id="admin-check-key-input" placeholder="vicat-xxxx-xxxx-xxxx">
+                </div>
+                <button class="btn" onclick="handleAdminCheckKey()">Kiểm tra</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        
+        let currentUser = null;
+        
+        // Check login state on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkLoginState();
+        });
+        
+        function checkLoginState() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            } else {
+                showAuthPage();
+            }
+        }
+        
+        function showAuthPage() {
+            document.getElementById('auth-page').style.display = 'flex';
+            document.getElementById('user-dashboard').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'none';
+        }
+        
+        function showDashboard() {
+            document.getElementById('auth-page').style.display = 'none';
+            
+            if (currentUser.role === 'admin') {
+                document.getElementById('admin-dashboard').style.display = 'block';
+                document.getElementById('user-dashboard').style.display = 'none';
+                document.getElementById('admin-name').textContent = currentUser.username;
+            } else {
+                document.getElementById('user-dashboard').style.display = 'block';
+                document.getElementById('admin-dashboard').style.display = 'none';
+                document.getElementById('user-name').textContent = currentUser.username;
+                loadUserKeys();
+            }
+        }
+        
+        // ==========================================
+        // AUTH FUNCTIONS
+        // ==========================================
+        
+        function switchToRegister() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+            document.getElementById('auth-subtitle').textContent = 'Tạo tài khoản mới';
+            hideMessage('auth-message');
+        }
+        
+        function switchToLogin() {
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('auth-subtitle').textContent = 'Đăng nhập để quản lý keys';
+            hideMessage('auth-message');
+        }
+        
+        async function handleLogin() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            if (!username || !password) {
+                showMessage('auth-message', 'Vui lòng nhập đầy đủ thông tin!', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('login-btn');
+            setButtonLoading(btn, true);
+            
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    currentUser = {
+                        role: data.role,
+                        username: data.username,
+                        sessionToken: data.sessionToken,
+                        password: password
+                    };
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showMessage('auth-message', '✅ Đăng nhập thành công!', 'success');
+                    setTimeout(() => {
+                        showDashboard();
+                    }, 500);
+                } else {
+                    showMessage('auth-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('auth-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        }
+        
+        async function handleRegister() {
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value;
+            const email = document.getElementById('register-email').value.trim();
+            
+            if (!username || !password) {
+                showMessage('auth-message', 'Vui lòng nhập username và password!', 'error');
+                return;
+            }
+            
+            if (!/^[a-zA-Z0-9@]+$/.test(username)) {
+                showMessage('auth-message', 'Username chỉ được chứa chữ, số và @', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('register-btn');
+            setButtonLoading(btn, true);
+            
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, email: email || null })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showMessage('auth-message', '✅ Đăng ký thành công! Đang đăng nhập...', 'success');
+                    setTimeout(() => {
+                        document.getElementById('login-username').value = username;
+                        document.getElementById('login-password').value = password;
+                        switchToLogin();
+                        handleLogin();
+                    }, 1000);
+                } else {
+                    showMessage('auth-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('auth-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            } finally {
+                setButtonLoading(btn, false);
+            }
+        }
+        
+        async function handleLogout() {
+            if (currentUser && currentUser.sessionToken) {
+                try {
+                    await fetch('/auth/logout', {
+                        method: 'POST',
+                        headers: {
+                            'x-session-token': currentUser.sessionToken
+                        }
+                    });
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            }
+            
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            showAuthPage();
+            
+            // Clear all forms
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('register-username').value = '';
+            document.getElementById('register-password').value = '';
+            document.getElementById('register-email').value = '';
+        }
+        
+        // ==========================================
+        // USER DASHBOARD FUNCTIONS
+        // ==========================================
+        
+        async function handleRedeem() {
+            const code = document.getElementById('redeem-code-input').value.trim();
+            
+            if (!code) {
+                showMessage('redeem-message', 'Vui lòng nhập redeem code!', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/user/redeem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-session-token': currentUser.sessionToken
+                    },
+                    body: JSON.stringify({ code })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showMessage('redeem-message', '✅ Redeem thành công!', 'success');
+                    document.getElementById('redeemed-key-value').textContent = data.key;
+                    document.getElementById('redeemed-key-display').classList.remove('hidden');
+                    document.getElementById('redeem-code-input').value = '';
+                    
+                    // Reload keys list
+                    loadUserKeys();
+                } else {
+                    showMessage('redeem-message', '❌ ' + data.message, 'error');
+                    document.getElementById('redeemed-key-display').classList.add('hidden');
+                }
+            } catch (error) {
+                showMessage('redeem-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadUserKeys() {
+            try {
+                const response = await fetch('/user/keys', {
+                    method: 'GET',
+                    headers: {
+                        'x-session-token': currentUser.sessionToken
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayUserKeys(data.keys);
+                } else {
+                    showMessage('user-keys-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('user-keys-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        function displayUserKeys(keys) {
+            const container = document.getElementById('user-keys-list');
+            
+            if (keys.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔑</div>
+                        <p>Bạn chưa có key nào. Hãy redeem code để nhận key!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            keys.forEach(key => {
+                const isActive = key.status === 'active';
+                html += `
+                    <div class="list-item ${isActive ? '' : 'blacklisted'}">
+                        <div class="list-item-content">
+                            <div class="item-title">${key.key}</div>
+                            <div class="item-info">
+                                Tạo lúc: ${formatDate(key.created_at)}
+                                <span class="badge ${key.status}">${key.status === 'active' ? 'Active' : 'Blacklisted'}</span>
+                            </div>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-small btn-success" onclick="copyToClipboard('${key.key}')">
+                                📋 Copy
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        async function handleCheckKey() {
+            const key = document.getElementById('check-key-input').value.trim();
+            
+            if (!key) {
+                showMessage('check-message', 'Vui lòng nhập key!', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'ok') {
+                    showMessage('check-message', '✅ Key hợp lệ và đang hoạt động!', 'success');
+                } else if (data.status === 'denied') {
+                    if (data.message.includes('blacklist')) {
+                        showMessage('check-message', '🚫 Key này đã bị blacklist!', 'error');
+                    } else {
+                        showMessage('check-message', '❌ Key không hợp lệ!', 'error');
+                    }
+                }
+            } catch (error) {
+                showMessage('check-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        // ==========================================
+        // ADMIN DASHBOARD FUNCTIONS
+        // ==========================================
+        
+        async function handleCreateCodes() {
+            const count = parseInt(document.getElementById('code-count').value);
+            
+            if (!count || count < 1 || count > 100) {
+                showMessage('create-message', 'Số lượng phải từ 1-100!', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/admin/create-redeem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-admin-username': currentUser.username,
+                        'x-admin-password': currentUser.password
+                    },
+                    body: JSON.stringify({ count })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showMessage('create-message', `✅ Đã tạo ${data.codes.length} codes!`, 'success');
+                    displayGeneratedCodes(data.codes);
+                } else {
+                    showMessage('create-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('create-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        function displayGeneratedCodes(codes) {
+            const container = document.getElementById('generated-codes-list');
+            document.getElementById('generated-codes-display').classList.remove('hidden');
+            
+            let html = '';
+            codes.forEach(code => {
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="item-title">${code}</div>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-small btn-success" onclick="copyToClipboard('${code}')">
+                                📋 Copy
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        async function loadRedeemCodes() {
+            try {
+                const response = await fetch('/admin/redeem-codes', {
+                    method: 'GET',
+                    headers: {
+                        'x-admin-username': currentUser.username,
+                        'x-admin-password': currentUser.password
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayRedeemCodes(data.codes);
+                } else {
+                    showMessage('codes-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('codes-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        function displayRedeemCodes(codes) {
+            const container = document.getElementById('codes-list');
+            
+            if (codes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎟️</div>
+                        <p>Chưa có redeem code nào.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            codes.forEach(code => {
+                html += `
+                    <div class="list-item ${code.redeemed ? 'redeemed' : ''}">
+                        <div class="list-item-content">
+                            <div class="item-title">${code.code}</div>
+                            <div class="item-info">
+                                Tạo lúc: ${formatDate(code.created_at)}
+                                <span class="badge ${code.redeemed ? 'redeemed' : 'available'}">
+                                    ${code.redeemed ? 'Đã sử dụng' : 'Chưa sử dụng'}
+                                </span>
+                                ${code.redeemed ? `<br>Được redeem bởi: ${code.redeemed_by}` : ''}
+                            </div>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-small btn-success" onclick="copyToClipboard('${code.code}')">
+                                📋 Copy
+                            </button>
+                            ${!code.redeemed ? `
+                                <button class="btn btn-small btn-danger" onclick="deleteRedeemCode('${code.code}')">
+                                    🗑️ Delete
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        async function deleteRedeemCode(code) {
+            if (!confirm(`Bạn có chắc muốn xóa code ${code}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/admin/redeem/${code}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'x-admin-username': currentUser.username,
+                        'x-admin-password': currentUser.password
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showMessage('codes-message', '✅ Đã xóa code!', 'success');
+                    loadRedeemCodes();
+                } else {
+                    showMessage('codes-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('codes-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadAllKeys() {
+            try {
+                const response = await fetch('/admin/all-keys', {
+                    method: 'GET',
+                    headers: {
+                        'x-admin-username': currentUser.username,
+                        'x-admin-password': currentUser.password
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayAllKeys(data.keys);
+                    displayBlacklist(data.blacklist);
+                } else {
+                    showMessage('keys-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('keys-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadAllUsers() {
+            try {
+                const response = await fetch('/admin/all-users', {
+                    method: 'GET',
+                    headers: {
+                        'x-admin-username': currentUser.username,
+                        'x-admin-password': currentUser.password
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayAllUsers(data.users);
+                } else {
+                    showMessage('users-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('users-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        function displayAllKeys(keys) {
+            const container = document.getElementById('keys-list');
+            
+            if (keys.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔑</div>
+                        <p>Chưa có key nào.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            keys.forEach(key => {
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="item-title">${key.key}</div>
+                            <div class="item-info">
+                                Owner: ${key.user_id} | Tạo lúc: ${formatDate(key.created_at)}
+                                <span class="badge active">Active</span>
+                            </div>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-small btn-success" onclick="copyToClipboard('${key.key}')">
+                                📋 Copy
+                            </button>
+                            <button class="btn btn-small btn-danger" onclick="blacklistKey('${key.key}')">
+                                🚫 Blacklist
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function displayBlacklist(blacklist) {
+            const container = document.getElementById('blacklist-list');
+            
+            if (blacklist.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🚫</div>
+                        <p>Chưa có key nào bị blacklist.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            blacklist.forEach(item => {
+                html += `
+                    <div class="list-item blacklisted">
+                        <div class="list-item-content">
+                            <div class="item-title" style="color: #f44336;">${item.key}</div>
+                            <div class="item-info">
+                                Blacklisted lúc: ${formatDate(item.blacklisted_at)}
+                            </div>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn btn-small btn-success" onclick="copyToClipboard('${item.key}')">
+                                📋 Copy
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function displayAllUsers(users) {
+            const container = document.getElementById('users-list');
+            
+            if (users.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <p>Chưa có user nào.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            users.forEach(user => {
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="item-title">${user.username}</div>
+                            <div class="item-info">
+                                Email: ${user.email || 'N/A'} | 
+                                Keys: ${user.keys.length} | 
+                                Tạo lúc: ${formatDate(user.created_at)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        async function blacklistKey(key) {
+            if (!confirm(`Bạn có chắc muốn blacklist key ${key}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/admin/blacklist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-admin-username': currentUser.username,
+                        'x-admin-password': currentUser.password
+                    },
+                    body: JSON.stringify({ key })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showMessage('keys-message', '✅ Đã blacklist key!', 'success');
+                    loadAllKeys();
+                } else {
+                    showMessage('keys-message', '❌ ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('keys-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        async function handleAdminCheckKey() {
+            const key = document.getElementById('admin-check-key-input').value.trim();
+            
+            if (!key) {
+                showMessage('admin-check-message', 'Vui lòng nhập key!', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'ok') {
+                    showMessage('admin-check-message', '✅ Key hợp lệ và đang hoạt động!', 'success');
+                } else if (data.status === 'denied') {
+                    if (data.message.includes('blacklist')) {
+                        showMessage('admin-check-message', '🚫 Key này đã bị blacklist!', 'error');
+                    } else {
+                        showMessage('admin-check-message', '❌ Key không hợp lệ!', 'error');
+                    }
+                }
+            } catch (error) {
+                showMessage('admin-check-message', '❌ Lỗi kết nối: ' + error.message, 'error');
+            }
+        }
+        
+        // ==========================================
+        // TAB SWITCHING
+        // ==========================================
+        
+        function switchDashboardTab(tabId) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Load data for specific tabs
+            if (tabId === 'admin-codes') {
+                loadRedeemCodes();
+            } else if (tabId === 'admin-keys' || tabId === 'admin-blacklist') {
+                loadAllKeys();
+            } else if (tabId === 'admin-users') {
+                loadAllUsers();
+            }
+        }
+        
+        // ==========================================
+        // UTILITY FUNCTIONS
+        // ==========================================
+        
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = 'message ' + type;
+            element.style.display = 'block';
+        }
+        
+        function hideMessage(elementId) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'none';
+        }
+        
+        function setButtonLoading(button, isLoading) {
+            if (isLoading) {
+                button.disabled = true;
+                button.innerHTML = '<span class="loading"></span> Đang xử lý...';
+            } else {
+                button.disabled = false;
+                // Restore original text based on button id
+                if (button.id === 'login-btn') {
+                    button.textContent = 'Đăng nhập';
+                } else if (button.id === 'register-btn') {
+                    button.textContent = 'Đăng ký';
+                }
+            }
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Đã copy: ' + text);
+            }).catch(err => {
+                alert('❌ Không thể copy: ' + err);
+            });
+        }
+        
+        function copyKey(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            copyToClipboard(text);
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('vi-VN');
+        }
+        
+        // Allow Enter key to submit on login/register forms
+        document.getElementById('login-password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+        
+        document.getElementById('register-password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleRegister();
+        });
+        
+        document.getElementById('redeem-code-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleRedeem();
+        });
+        
+        document.getElementById('check-key-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleCheckKey();
+        });
+        
+        document.getElementById('admin-check-key-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleAdminCheckKey();
+        });
+    </script>
+</body>
+</html>
