@@ -2,4 +2,55 @@
   "admin": {
     "username": "Meo73preb",
     "password_hash": "$2a$10$aeDtYX4ceOxA9o1IxgEcCuS8vfcyRpJhq0B.SxBosREiueZMSFVT6"
+  },
+  "users": [
+    {
+      "id": "a42b35d7-a676-4601-a0d8-e8a70f42ed2a",
+      "username": "Meo73preb@test",
+      "password_hash": "$2a$10$uD4ry/Vz5M2xMaMHxmgAUOF20fIdG0C5niUHul2cHthEbfrCuWSy.",
+      "email": null,
+      "created_at": "2025-10-26T08:28:23.851Z",
+      "keys": [
+        "vicat-45nd-kn0i-9bcr"
+      ]
+    }
+  ],
+  "redeem_codes": [
+    {
+      "code": "H1NVKBQNJMQE",
+      "redeemed": true,
+      "redeemed_by": "a0b7be2f-9bfd-431a-a07b-79ffcb9b26a0",
+      "redeemed_at": "2025-10-26T08:15:15.420Z",
+      "created_at": "2025-10-26T08:15:15.331Z"
+    },
+    {
+      "code": "4O8RRPMRLOAS",
+      "redeemed": true,
+      "redeemed_by": "a42b35d7-a676-4601-a0d8-e8a70f42ed2a",
+      "redeemed_at": "2025-10-26T08:28:38.101Z",
+      "created_at": "2025-10-26T08:26:28.737Z"
+    }
+  ],
+  "active_keys": [
+    {
+      "key": "vicat-45nd-kn0i-9bcr",
+      "user_id": "a42b35d7-a676-4601-a0d8-e8a70f42ed2a",
+      "created_at": "2025-10-26T08:28:38.101Z",
+      "status": "active"
+    }
+  ],
+  "blacklist": [
+    {
+      "key": "vicat-7sq3-tkco-3qgi",
+      "blacklisted_at": "2025-10-26T08:26:08.439Z"
+    }
+  ],
+  "sessions": [
+    {
+      "token": "396b1665-bafe-444c-bb83-951f1494fe96",
+      "userId": "a42b35d7-a676-4601-a0d8-e8a70f42ed2a",
+      "createdAt": "2025-10-26T08:28:25.137Z",
+      "expiresAt": "2025-11-25T08:28:25.137Z"
+    }
+  ]
 }
